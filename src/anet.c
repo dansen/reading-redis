@@ -112,6 +112,7 @@ int anetCloexec(int fd) {
     if (r == -1 || (r & FD_CLOEXEC))
         return r;
 
+    // 关闭子进程无用文件描述符
     flags = r | FD_CLOEXEC;
 
     do {

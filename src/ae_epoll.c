@@ -45,6 +45,8 @@ static int aeApiCreate(aeEventLoop *eventLoop) {
         zfree(state);
         return -1;
     }
+
+    // 创建文件描述符
     state->epfd = epoll_create(1024); /* 1024 is just a hint for the kernel */
     if (state->epfd == -1) {
         zfree(state->events);
@@ -71,6 +73,7 @@ static void aeApiFree(aeEventLoop *eventLoop) {
     zfree(state);
 }
 
+// 增加event
 static int aeApiAddEvent(aeEventLoop *eventLoop, int fd, int mask) {
     aeApiState *state = eventLoop->apidata;
     struct epoll_event ee = {0}; /* avoid valgrind warning */
@@ -81,8 +84,12 @@ static int aeApiAddEvent(aeEventLoop *eventLoop, int fd, int mask) {
 
     ee.events = 0;
     mask |= eventLoop->events[fd].mask; /* Merge old events */
+
+    //epoll_ctl设置事件 AE_READABLE对应EPOLLIN
     if (mask & AE_READABLE) ee.events |= EPOLLIN;
+    // AE_WRITABLE对应EPOLLOUT
     if (mask & AE_WRITABLE) ee.events |= EPOLLOUT;
+
     ee.data.fd = fd;
     if (epoll_ctl(state->epfd,op,fd,&ee) == -1) return -1;
     return 0;
@@ -97,6 +104,7 @@ static void aeApiDelEvent(aeEventLoop *eventLoop, int fd, int delmask) {
     if (mask & AE_READABLE) ee.events |= EPOLLIN;
     if (mask & AE_WRITABLE) ee.events |= EPOLLOUT;
     ee.data.fd = fd;
+    // 与add类似epoll_ctl
     if (mask != AE_NONE) {
         epoll_ctl(state->epfd,EPOLL_CTL_MOD,fd,&ee);
     } else {
