@@ -3463,6 +3463,7 @@ uint64_t redisBuildId(void);
 const char *redisBuildIdRaw(void);
 char *redisBuildIdString(void);
 
+// 所有的命令
 /* Commands prototypes */
 void authCommand(client *c);
 void pingCommand(client *c);

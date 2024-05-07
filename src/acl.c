@@ -14,7 +14,7 @@
 /* =============================================================================
  * Global state for ACLs
  * ==========================================================================*/
-
+// 全局变量
 rax *Users; /* Table mapping usernames to user structures. */
 
 user *DefaultUser;  /* Global reference to the default user.

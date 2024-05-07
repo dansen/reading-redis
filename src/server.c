@@ -67,6 +67,7 @@ double R_Zero, R_PosInf, R_NegInf, R_Nan;
 
 /*================================= Globals ================================= */
 
+// 简单的全局变量
 /* Global vars */
 struct redisServer server; /* Server global state */
 

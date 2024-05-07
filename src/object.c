@@ -382,6 +382,7 @@ void decrRefCount(robj *o) {
         }
         zfree(o);
     } else {
+        // 遇到不可能发生的直接panic
         if (o->refcount <= 0) serverPanic("decrRefCount against refcount <= 0");
         if (o->refcount != OBJ_SHARED_REFCOUNT) o->refcount--;
     }
